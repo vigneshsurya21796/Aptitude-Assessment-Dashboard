@@ -1,0 +1,71 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Settings {
+  id                  Int      @id @default(1)
+  testDurationMinutes Int      @default(15)
+  passPercentage      Float    @default(60.0)
+  updatedAt           DateTime @updatedAt
+}
+
+model Question {
+  id            String   @id @default(uuid())
+  text          String
+  optionA       String
+  optionB       String
+  optionC       String
+  optionD       String
+  correctOption String   // 'A' | 'B' | 'C' | 'D'
+  category      String   // 'Quantitative' | 'Logical Reasoning' | 'Verbal'
+  difficulty    String   // 'Easy' | 'Medium' | 'Hard'
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Candidate {
+  id            String   @id @default(uuid())
+  fullName      String
+  email         String   @unique
+  age           Int
+  phone         String
+  gender        String?
+  qualification String
+  city          String?
+  createdAt     DateTime @default(now())
+  attempt       Attempt?
+}
+
+model Attempt {
+  id                String    @id @default(uuid())
+  candidateId       String    @unique
+  candidate         Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  startedAt         DateTime  @default(now())
+  submittedAt       DateTime?
+  status            String    @default("IN_PROGRESS") // 'IN_PROGRESS' | 'COMPLETED'
+  questionOrder     String    // JSON stringified array of question IDs
+  answers           String    // JSON stringified map { [questionId]: { selectedOption: string | null, markedForReview: boolean } }
+  score             Float     @default(0)
+  percentage        Float     @default(0)
+  correctCount      Int       @default(0)
+  incorrectCount    Int       @default(0)
+  unattemptedCount  Int       @default(10)
+  marksDeducted     Float     @default(0)
+  timeTakenSeconds  Int       @default(0)
+  passed            Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}

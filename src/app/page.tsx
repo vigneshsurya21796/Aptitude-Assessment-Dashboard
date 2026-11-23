@@ -1,0 +1,438 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import { 
+  ArrowRight, 
+  ShieldAlert, 
+  Clock, 
+  Award, 
+  Lock
+} from "lucide-react";
+import gsap from "gsap";
+import axios, { AxiosError } from "axios";
+
+export default function RegistrationPage() {
+  const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    age: "",
+    phone: "",
+    gender: "",
+    qualification: "",
+    city: "",
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<{ message: string; attemptId?: string } | null>(null);
+
+  // GSAP Choreographed Entrance
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".hero-element", {
+        opacity: 0,
+        y: 24,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
+      });
+
+      gsap.from(".form-card", {
+        opacity: 0,
+        y: 30,
+        duration: 0.9,
+        delay: 0.2,
+        ease: "power3.out",
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case "fullName":
+        if (!value.trim()) return "Full name is required.";
+        if (!/^[A-Za-z\s]{2,50}$/.test(value.trim())) {
+          return "Name must be 2-50 characters containing only letters and spaces.";
+        }
+        return "";
+      case "email":
+        if (!value.trim()) return "Email address is required.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
+          return "Please enter a valid corporate or professional email address.";
+        }
+        return "";
+      case "age": {
+        const num = parseInt(value, 10);
+        if (!value) return "Age is required.";
+        if (isNaN(num) || num < 18 || num > 60) {
+          return "Age must be an integer between 18 and 60 inclusive.";
+        }
+        return "";
+      }
+      case "phone":
+        if (!value.trim()) return "Phone number is required.";
+        if (!/^\d{10}$/.test(value.trim())) {
+          return "Phone number must be strictly 10 numeric digits.";
+        }
+        return "";
+      case "qualification":
+        if (!value) return "Please specify your highest qualification.";
+        return "";
+      default:
+        return "";
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setServerError(null);
+
+    // Live inline validation
+    const errorMsg = validateField(name, value);
+    setErrors((prev) => ({
+      ...prev,
+      [name]: errorMsg,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError(null);
+
+    // Validate all fields
+    const newErrors: Record<string, string> = {};
+    const fieldsToValidate = ["fullName", "email", "age", "phone", "qualification"];
+    for (const f of fieldsToValidate) {
+      const err = validateField(f, formData[f as keyof typeof formData]);
+      if (err) newErrors[f] = err;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      const firstErrorField = document.querySelector(`[name="${Object.keys(newErrors)[0]}"]`) as HTMLElement;
+      firstErrorField?.focus();
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      const res = await axios.post("/api/candidate/register", formData);
+      const data = res.data;
+
+      // Store candidate info in session
+      sessionStorage.setItem(
+        "candidate_session",
+        JSON.stringify({
+          candidateId: data.candidateId,
+          fullName: data.fullName,
+          email: data.email,
+        })
+      );
+
+      // Navigate to instructions page
+      router.push("/instructions");
+    } catch (err) {
+      console.error(err);
+      if (axios.isAxiosError(err) && err.response) {
+        const errorData = err.response.data;
+        if (err.response.status === 409 && errorData.attemptId) {
+          setServerError({
+            message: errorData.error,
+            attemptId: errorData.attemptId,
+          });
+        } else {
+          setServerError({ message: errorData.error || "Registration failed. Please check your inputs." });
+        }
+      } else {
+        setServerError({ message: "Network connection error. Please try again." });
+      }
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div ref={containerRef} className="min-h-screen bg-stone-surface flex flex-col">
+      <Header />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Left Column: Editorial Assessment Overview */}
+          <div className="lg:col-span-5 flex flex-col space-y-8">
+            <div className="space-y-4 hero-element">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-obsidian-950 text-stone-surface text-xs font-mono tracking-wider uppercase">
+                <Lock className="w-3.5 h-3.5 text-terracotta-400" />
+                Session Verification
+              </div>
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-5.5xl text-obsidian-950 leading-[1.15] font-semibold">
+                Executive Aptitude Evaluation
+              </h1>
+              <p className="text-obsidian-600 text-base sm:text-lg leading-relaxed">
+                A standardized 10-question evaluation measuring quantitative reasoning, 
+                logical deduction, and executive verbal communication. 
+              </p>
+            </div>
+
+            {/* Key Assessment Parameters */}
+            <div className="space-y-4 pt-4 border-t border-stone-border hero-element">
+              <h2 className="text-xs font-mono uppercase tracking-widest text-obsidian-400">
+                Evaluation Standards
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="surface-elevated rounded-xl p-4 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-terracotta-50 text-terracotta-600 flex items-center justify-center shrink-0">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="block text-xs font-mono text-obsidian-500">Duration</span>
+                    <span className="font-serif text-lg font-semibold text-obsidian-950">15 Minutes</span>
+                  </div>
+                </div>
+
+                <div className="surface-elevated rounded-xl p-4 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <Award className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="block text-xs font-mono text-obsidian-500">Marking Formula</span>
+                    <span className="font-serif text-lg font-semibold text-obsidian-950">+2 / -1 Net</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="surface-elevated rounded-xl p-4 space-y-2 text-xs text-obsidian-600">
+                <div className="flex items-center gap-2 font-medium text-obsidian-900">
+                  <ShieldAlert className="w-4 h-4 text-terracotta-500" />
+                  Strict Single-Attempt Policy
+                </div>
+                <p>
+                  Each corporate candidate is authorized exactly one verified attempt per email identifier. Results are permanently stored in the audit registry.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Registration Card */}
+          <div className="lg:col-span-7">
+            <div className="form-card surface-elevated rounded-2xl p-6 sm:p-10 shadow-tinted-md border border-stone-border">
+              <div className="border-b border-stone-border pb-6 mb-8">
+                <h2 className="font-serif text-2xl font-semibold text-obsidian-950">
+                  Candidate Registration
+                </h2>
+                <p className="text-sm text-obsidian-600 mt-1">
+                  Enter your verified credentials to initiate your proctored evaluation session.
+                </p>
+              </div>
+
+              {serverError && (
+                <div className="mb-6 p-4 rounded-xl bg-crimson-50 border border-crimson-500/20 text-crimson-700 text-sm flex items-start gap-3">
+                  <ShieldAlert className="w-5 h-5 shrink-0 text-crimson-500 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="font-medium">{serverError.message}</p>
+                    {serverError.attemptId && (
+                      <button
+                        type="button"
+                        onClick={() => router.push(`/result/${serverError.attemptId}`)}
+                        className="text-xs font-semibold text-terracotta-600 underline hover:text-terracotta-700"
+                      >
+                        View your completed assessment analytics &rarr;
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Full Name */}
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                    Full Legal Name <span className="text-terracotta-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="e.g. Eleanor Vance"
+                    className={`w-full px-4 py-3 rounded-xl bg-stone-surface border text-sm transition-all focus:bg-white ${
+                      errors.fullName
+                        ? "border-crimson-500 ring-1 ring-crimson-500"
+                        : "border-stone-border hover:border-obsidian-400 focus:border-terracotta-500"
+                    }`}
+                  />
+                  {errors.fullName && (
+                    <p className="mt-1.5 text-xs text-crimson-600 font-medium">{errors.fullName}</p>
+                  )}
+                </div>
+
+                {/* Email and Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Corporate Email <span className="text-terracotta-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="e.g. eleanor@meridian.com"
+                      className={`w-full px-4 py-3 rounded-xl bg-stone-surface border text-sm transition-all focus:bg-white ${
+                        errors.email
+                          ? "border-crimson-500 ring-1 ring-crimson-500"
+                          : "border-stone-border hover:border-obsidian-400 focus:border-terracotta-500"
+                      }`}
+                    />
+                    {errors.email && (
+                      <p className="mt-1.5 text-xs text-crimson-600 font-medium">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Phone Number (10 Digits) <span className="text-terracotta-500">*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      maxLength={10}
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="e.g. 9876543210"
+                      className={`w-full px-4 py-3 rounded-xl bg-stone-surface border text-sm font-mono transition-all focus:bg-white ${
+                        errors.phone
+                          ? "border-crimson-500 ring-1 ring-crimson-500"
+                          : "border-stone-border hover:border-obsidian-400 focus:border-terracotta-500"
+                      }`}
+                    />
+                    {errors.phone && (
+                      <p className="mt-1.5 text-xs text-crimson-600 font-medium">{errors.phone}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Age and Qualification */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Age (18–60) <span className="text-terracotta-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      name="age"
+                      min={18}
+                      max={60}
+                      value={formData.age}
+                      onChange={handleChange}
+                      placeholder="28"
+                      className={`w-full px-4 py-3 rounded-xl bg-stone-surface border text-sm font-mono transition-all focus:bg-white ${
+                        errors.age
+                          ? "border-crimson-500 ring-1 ring-crimson-500"
+                          : "border-stone-border hover:border-obsidian-400 focus:border-terracotta-500"
+                      }`}
+                    />
+                    {errors.age && (
+                      <p className="mt-1.5 text-xs text-crimson-600 font-medium">{errors.age}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Highest Qualification <span className="text-terracotta-500">*</span>
+                    </label>
+                    <select
+                      name="qualification"
+                      value={formData.qualification}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3 rounded-xl bg-stone-surface border text-sm transition-all focus:bg-white ${
+                        errors.qualification
+                          ? "border-crimson-500 ring-1 ring-crimson-500"
+                          : "border-stone-border hover:border-obsidian-400 focus:border-terracotta-500"
+                      }`}
+                    >
+                      <option value="">Select qualification...</option>
+                      <option value="High School">High School</option>
+                      <option value="Diploma">Diploma</option>
+                      <option value="Bachelor's Degree">Bachelor's Degree</option>
+                      <option value="Master's Degree">Master's Degree</option>
+                      <option value="PhD">PhD</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    {errors.qualification && (
+                      <p className="mt-1.5 text-xs text-crimson-600 font-medium">{errors.qualification}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Gender and City (Optional) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Gender <span className="text-obsidian-400">(Optional)</span>
+                    </label>
+                    <select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl bg-stone-surface border border-stone-border text-sm hover:border-obsidian-400 focus:border-terracotta-500 focus:bg-white transition-all"
+                    >
+                      <option value="">Select gender...</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Non-binary">Non-binary</option>
+                      <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
+                      Location / City <span className="text-obsidian-400">(Optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      placeholder="e.g. San Francisco, CA"
+                      className="w-full px-4 py-3 rounded-xl bg-stone-surface border border-stone-border text-sm hover:border-obsidian-400 focus:border-terracotta-500 focus:bg-white transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-stone-border">
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full py-4 px-6 rounded-xl bg-obsidian-950 text-stone-surface hover:bg-obsidian-850 active:bg-obsidian-900 font-medium text-sm flex items-center justify-center gap-2 shadow-tinted-lg transition-all btn-press disabled:opacity-50"
+                  >
+                    {submitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-stone-surface border-t-transparent rounded-full animate-spin" />
+                        Validating Credentials...
+                      </span>
+                    ) : (
+                      <>
+                        <span>Proceed to Assessment Briefing</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
