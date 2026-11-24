@@ -237,24 +237,34 @@ The development journey followed a deliberate, structured engineering process:
 
 ---
 
-### 6.2. Key Prompts That Shaped the Application
+### 6.2. Architectural Evolution & Production Hardening Milestones
 
-Below is the chronological journey of actual directives and architectural prompts that shaped the final production system:
+Rather than relying on unconstrained generative output, the application underwent a series of structured, human-guided engineering iterations. Each milestone systematically hardened the architecture, elevated security standards, and refined the user experience:
 
-| # | User Directive / Prompt | Technical Transformation & Architectural Impact |
-|---|---|---|
-| **0** | *"Convert the provided .docx assessment brief into a structured antigravity_agent_configuration.md system blueprint"* | Extracted all functional specifications, scoring formulas, and UI requirements into an actionable architectural master plan with strict design tokens, eliminating AI hallucinations before coding began. |
-| **1** | *"Start building the app based on the antigravity_agent_configuration.md instructions"* | Architected full-stack Next.js 14 App Router scaffolding, custom Tailwind tokens (*Obsidian, Stone, Terracotta, Emerald*), GSAP animations, 10 corporate questions, Prisma ORM, and $+2 / -1$ scoring logic. |
-| **2** | *"Use axios for data fetching change from fetch"* | Replaced all native `fetch()` calls across all 10 client components and pages with `axios`, creating a centralized API client with timeout management and type-safe `isAxiosError` error responses. |
-| **3** | *"Where is the users data stored in this code"* | Audited the data lifecycle between browser `sessionStorage` (temporary timer/answers recovery) and database collections (`Candidate`, `Attempt`), establishing strict single-attempt email uniqueness. |
-| **4** | *"Use MongoDB Atlas"* | Migrated database schema to MongoDB provider with native ObjectIds (`@id @default(auto()) @map("_id") @db.ObjectId`). Synchronized collections and unique indexes (`Admin_email_key`, `Candidate_email_key`, `Attempt_candidateId_key`) to a live cloud Atlas replica set. |
-| **5** | *"Currently password stored hashed or plain ?"* & *"Change the secret to more complex one"* | Verified `bcryptjs` password hashing (10 salt rounds) for admin accounts, and upgraded the JWT secret from a plain text string to a cryptographically secure 256-bit hexadecimal key (`27cd2aadb...`). |
-| **6** | *"Verify names and everything that more suitable for app no AI slop usual names it should sync with agenda of the app"* | Conducted a full-codebase audit to eliminate generic AI-generated buzzwords (`Live Verification Protocol`, `Session Verification`, `Verified Assessment Dossier`) and replaced them with grounded corporate testing language (`Candidate Registration`, `10 Questions • 15 Mins`, `Candidate Test Result`). |
-| **7** | *"Executive Console Sign In change this to more meaningful one also change wherever similar title comes with word like console"* | Replaced corporate jargon like `Executive Console Sign In`, `Admin Console`, and `Compiling Executive Metrics` with standard, user-friendly labels: `Admin Login`, `Admin Panel`, and `Loading Dashboard Metrics`. |
-| **8** | *"10 Questions • 15 Mins remove this from the header instead ad this in the Test Summary section"* | Removed the misplaced status badge from the global navigation bar and integrated it directly into the Test Summary card block. |
-| **9** | *"Better the summary of Test Summary the cards looks cramped get alternate attractive design if need short the text questions to qns all three should be equal"* | Redesigned the horizontal flex layout into a balanced, equal 3-column vertical stat card grid (`10 Qns`, `15 Min`, `+2 / -1`) with centered icon badges and zero text wrapping. |
-| **10** | *"Make Attempt Submission Time in export csv human readable currently it looks like this 2026-11-24T01:57:42.632Z"* | Replaced raw ISO machine strings with human-readable timestamps (`24 Nov 2026, 07:27:42 AM`, `04m 12s`, `24 Nov 2026`) across the RFC 4180 CSV export, candidate audit table, and result dossier. |
-| **11** | *"Create custom icons for header aptitude assessment and favicon also in the tab to represent the app perfect"* | Designed and implemented a bespoke geometric vector emblem (`AptitudeLogo.tsx`) featuring an obsidian geometric badge with a terracotta apex and emerald talent spark, accompanied by matched vector favicons (`public/favicon.svg`, `public/icon.svg`). |
+| Phase | Engineering Focus | Strategic Objective | Technical Implementation |
+|---|---|---|---|
+| **01** | **System Specification** | Architectural Blueprinting | Ingested the `.docx` brief into [`antigravity_agent_configuration.md`](./antigravity_agent_configuration.md), locking down database models, $+2 / -1$ scoring rules, and anti-slop design tokens before code execution. |
+| **02** | **Full-Stack Core** | App Scaffolding & Engine | Architected Next.js 14 App Router full-stack structure, Prisma ORM layer, GSAP motion choreography, and seeded 10 multi-step corporate assessment questions. |
+| **03** | **Network Layer** | Type-Safe Client Fetching | Replaced native `fetch` with a centralized **Axios** client across all 10 client views, introducing timeout management and `isAxiosError` response typing. |
+| **04** | **Data Persistence** | Cloud Replica Set Migration | Migrated schema primitives to native **MongoDB Atlas** ObjectIds (`@db.ObjectId`) with cloud replica set clustering and unique constraint enforcement (`Candidate_email_key`). |
+| **05** | **Security & Auth** | Cryptographic Hardening | Verified `bcryptjs` password hashing (10 salt rounds) for admin accounts, and upgraded the JWT secret from a default string to a high-entropy 256-bit cryptographic hex key. |
+| **06** | **Domain Refinement** | Linguistic De-Slop Audit | Replaced generic, pseudo-futuristic AI buzzwords (`Live Verification Protocol`, `Executive Console`, `Verified Dossier`) with clear, professional testing terminology (`Candidate Registration`, `Admin Login`, `Question Bank`). |
+| **07** | **Visual Ergonomics** | Information Architecture | De-cluttered the global header by relocating test parameters to the registration card, and transformed a cramped horizontal summary into an equal-width 3-column vertical stat card grid (`10 Qns`, `15 Min`, `+2 / -1`). |
+| **08** | **Reporting & Export** | Human-Centric Data Formatting | Replaced raw ISO machine strings (`2026-11-24T01:57:42.632Z`) with localized, 12-hour AM/PM human-readable timestamps (`24 Nov 2026, 07:27:42 AM`, `04m 12s`) across CSV exports and audit modals. |
+| **09** | **Brand Identity** | Bespoke Vector Identity | Replaced generic emoji and text ligatures with a custom geometric vector emblem (`<AptitudeLogo />`) and matching SVG browser tab favicons (`public/favicon.svg`). |
+
+#### Detailed Engineering Decisions:
+
+1. **Protocol-Level Data Fetching (Axios Migration):**
+   - The initial prototype relied on native `fetch()`, which required verbose manual boilerplate for checking `response.ok`, extracting JSON payloads, and handling network timeouts.
+   - Migrating to a centralized Axios architecture (`src/lib/api.ts`) established standardized timeout boundaries (10 seconds), automatic JSON serialization, and centralized error classification using `axios.isAxiosError(error)`.
+
+2. **Dual-Layer Persistence Strategy:**
+   - Candidate progress is safeguarded through a dual-persistence model: answers and timer state are synchronized to the MongoDB database in real time while mirrored locally in browser `sessionStorage`.
+   - If a candidate accidentally reloads their browser, experiences a network blip, or closes the tab, the state is restored without resetting the countdown timer.
+
+3. **Server-Authoritative Scoring Integrity:**
+   - Correct answers are strictly decoupled from client-side bundles. The browser only receives question texts and options; scoring evaluations, marks deduction, percentages, and pass/fail determinations are computed exclusively on the server at submission time.
 
 ---
 
