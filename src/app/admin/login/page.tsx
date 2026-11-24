@@ -105,7 +105,7 @@ function LoginForm() {
             <span className="w-4 h-4 border-2 border-stone-surface border-t-transparent rounded-full animate-spin" />
           ) : (
             <>
-              <span>Authenticate Session</span>
+              <span>Login</span>
               <ArrowRight className="w-4 h-4 text-terracotta-400" />
             </>
           )}

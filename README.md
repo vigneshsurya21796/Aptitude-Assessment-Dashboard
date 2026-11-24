@@ -212,22 +212,87 @@ model Attempt {
 
 ---
 
-## 6. Build with AI — Tools & Key Prompts
+## 6. Build with AI — Prompts, Techniques & Frontend Mastery
 
-As specified in the assignment guidelines, this application was architected, written, and refined using agentic AI coding tools.
+As required by the assignment guidelines, this application was architected, written, and iteratively refined using an agentic AI coding workflow.
 
-### AI Tool Used:
-* **Google Antigravity Agent** (powered by Gemini 2.5 Pro / Thinking model)
+### 6.1. Workflow Inception: From Raw `.docx` to Agent Blueprint
 
-### Key Prompts That Shaped the Application:
-1. **Foundation & Architecture:**
-   > *"Start building the full-stack Aptitude Assessment Dashboard app based on the assignment instructions: Candidate registration with validation, timed 10-question test with question palette, server-authoritative +2/-1 scoring, result dossier, protected Admin console with question CRUD (strict 10 active limit), candidate audit table with CSV export, settings, and GSAP animations."*
-2. **Client Data Fetching Layer:**
-   > *"Use axios for data fetching change from fetch across all client components with comprehensive error handling."*
-3. **Database Migration to MongoDB Atlas:**
-   > *"Migrate the database to MongoDB Atlas with native ObjectId schema mappings, transactions, and Prisma seeding."*
-4. **Security & Session Hardening:**
-   > *"Store passwords strictly hashed with bcrypt (salt rounds: 10), protect all admin routes with JWT in HttpOnly cookies via Next.js Middleware, and ensure correctOption is never leaked to candidate browser during active tests."*
+The development journey followed a deliberate, structured engineering process:
+
+1. **Ingestion of the Source Brief (`.docx`):**
+   - The initial project requirements were provided in a standard Word specification document (`.docx`).
+   - Rather than immediately generating code with raw, unconstrained prompts—which typically leads to hallucinated data schemas and cookie-cutter designs—the `.docx` specification was parsed and converted into a dedicated system configuration: [`antigravity_agent_configuration.md`](./antigravity_agent_configuration.md).
+
+2. **System Specification & Guardrails Blueprint:**
+   - [`antigravity_agent_configuration.md`](./antigravity_agent_configuration.md) acted as the operational "North Star" for the **Google Antigravity Agent** (powered by Gemini 2.5 Pro / Thinking model).
+   - It pre-established the entire architectural boundary:
+     - **Anti-AI-Slop & Anti-SaaS-Purple Design System:** Outlawed generic purple/indigo templates and mandated a warm editorial palette (*Stone, Obsidian, Terracotta, Imperial Emerald*).
+     - **Database Schema & Constraints:** Strictly defined models (`Candidate`, `Attempt`, `Question`, `Admin`, `Settings`) and unique candidate email constraints.
+     - **Mathematical Scoring Formula:** Formally pinned server-side $+2 / -1$ net scoring reconciliation.
+     - **Security & Persistence Rules:** Banned mock client data, mandated bcrypt password hashing, and required persistent database storage.
+
+3. **Human-in-the-Loop Iterative Steering:**
+   - Using the blueprint as the foundational guardrail, subsequent prompts were delivered iteratively to refine ergonomics, eliminate AI buzzwords, upgrade security, and perfect the candidate and administrator experience.
+
+---
+
+### 6.2. Key Prompts That Shaped the Application
+
+Below is the chronological journey of actual directives and architectural prompts that shaped the final production system:
+
+| # | User Directive / Prompt | Technical Transformation & Architectural Impact |
+|---|---|---|
+| **0** | *"Convert the provided .docx assessment brief into a structured antigravity_agent_configuration.md system blueprint"* | Extracted all functional specifications, scoring formulas, and UI requirements into an actionable architectural master plan with strict design tokens, eliminating AI hallucinations before coding began. |
+| **1** | *"Start building the app based on the antigravity_agent_configuration.md instructions"* | Architected full-stack Next.js 14 App Router scaffolding, custom Tailwind tokens (*Obsidian, Stone, Terracotta, Emerald*), GSAP animations, 10 corporate questions, Prisma ORM, and $+2 / -1$ scoring logic. |
+| **2** | *"Use axios for data fetching change from fetch"* | Replaced all native `fetch()` calls across all 10 client components and pages with `axios`, creating a centralized API client with timeout management and type-safe `isAxiosError` error responses. |
+| **3** | *"Where is the users data stored in this code"* | Audited the data lifecycle between browser `sessionStorage` (temporary timer/answers recovery) and database collections (`Candidate`, `Attempt`), establishing strict single-attempt email uniqueness. |
+| **4** | *"Use MongoDB Atlas"* | Migrated database schema to MongoDB provider with native ObjectIds (`@id @default(auto()) @map("_id") @db.ObjectId`). Synchronized collections and unique indexes (`Admin_email_key`, `Candidate_email_key`, `Attempt_candidateId_key`) to a live cloud Atlas replica set. |
+| **5** | *"Currently password stored hashed or plain ?"* & *"Change the secret to more complex one"* | Verified `bcryptjs` password hashing (10 salt rounds) for admin accounts, and upgraded the JWT secret from a plain text string to a cryptographically secure 256-bit hexadecimal key (`27cd2aadb...`). |
+| **6** | *"Verify names and everything that more suitable for app no AI slop usual names it should sync with agenda of the app"* | Conducted a full-codebase audit to eliminate generic AI-generated buzzwords (`Live Verification Protocol`, `Session Verification`, `Verified Assessment Dossier`) and replaced them with grounded corporate testing language (`Candidate Registration`, `10 Questions • 15 Mins`, `Candidate Test Result`). |
+| **7** | *"Executive Console Sign In change this to more meaningful one also change wherever similar title comes with word like console"* | Replaced corporate jargon like `Executive Console Sign In`, `Admin Console`, and `Compiling Executive Metrics` with standard, user-friendly labels: `Admin Login`, `Admin Panel`, and `Loading Dashboard Metrics`. |
+| **8** | *"10 Questions • 15 Mins remove this from the header instead ad this in the Test Summary section"* | Removed the misplaced status badge from the global navigation bar and integrated it directly into the Test Summary card block. |
+| **9** | *"Better the summary of Test Summary the cards looks cramped get alternate attractive design if need short the text questions to qns all three should be equal"* | Redesigned the horizontal flex layout into a balanced, equal 3-column vertical stat card grid (`10 Qns`, `15 Min`, `+2 / -1`) with centered icon badges and zero text wrapping. |
+| **10** | *"Make Attempt Submission Time in export csv human readable currently it looks like this 2026-11-24T01:57:42.632Z"* | Replaced raw ISO machine strings with human-readable timestamps (`24 Nov 2026, 07:27:42 AM`, `04m 12s`, `24 Nov 2026`) across the RFC 4180 CSV export, candidate audit table, and result dossier. |
+| **11** | *"Create custom icons for header aptitude assessment and favicon also in the tab to represent the app perfect"* | Designed and implemented a bespoke geometric vector emblem (`AptitudeLogo.tsx`) featuring an obsidian geometric badge with a terracotta apex and emerald talent spark, accompanied by matched vector favicons (`public/favicon.svg`, `public/icon.svg`). |
+
+---
+
+### 6.3. Techniques Used to Prevent "AI Slop" & the "Typical SaaS Purple" Cliché
+
+1. **Rejection of the "Typical Purple SaaS" Aesthetic:**
+   - **Why AI Defaults to Purple:** Standard LLMs are heavily trained on cookie-cutter Tailwind templates that default to indigo/violet buttons (`bg-indigo-600`, `bg-purple-600`), neon purple hero glows, and generic slate-900 cards.
+   - **Our Counter-Architecture:** We enforced a bespoke editorial aesthetic inspired by prestigious academic and executive assessment institutions:
+     - **Warm Stone Surfaces (`#FAF9F6`, `#F3F1EC`)** — eliminating sterile white and cold grey canvases.
+     - **Deep Obsidian (`#06090D`, `#141923`)** — providing high-contrast structure and tactile framing.
+     - **Terracotta Accent (`#D46733`)** — warm, deliberate interactive highlights and focal rings.
+     - **Imperial Emerald Accent (`#1B7A53`)** — authoritative confirmation for qualified candidates and correct answers.
+     - **Editorial Typography:** *Fraunces* (warm high-contrast serif), *Plus Jakarta Sans* (humanist sans), and *JetBrains Mono* (precise tabular figures).
+
+2. **Elimination of Robotic Buzzwords ("AI Slop"):**
+   - AI models tend to insert pseudo-futuristic corporate jargon (*"Live Verification Protocol"*, *"Executive Telemetry"*, *"Candidate Dossier"*, *"Executive Console"*, *"Autonomous Scoring Matrix"*).
+   - We systematically purged every robotic term, standardizing on clear, respectful candidate and admin language: `Candidate Registration`, `Admin Login`, `Question Bank`, `Candidate Results`, and `Question Response Analysis`.
+
+3. **Zero Mock or Hardcoded Data:**
+   - LLMs frequently fall back to hardcoded in-memory arrays or client mocks. This application enforces genuine persistence on a **MongoDB Atlas cloud replica set** for every single candidate, test answer, and timer state.
+
+4. **Server-Authoritative Evaluation:**
+   - AI code often erroneously trusts client-submitted scores or sends `correctOption` to the browser. We strictly decoupled evaluation: the browser only receives question texts and options, while marks, percentages, pass/fail status, and time spent are computed exclusively on the server upon submission.
+
+---
+
+### 6.4. How Frontend Design Was Invoked to Get the Best Out of AI
+
+1. **Constraint-First Prompting:**
+   - Pre-specifying exact design tokens, hex codes, typography pairings, and layout structures in `antigravity_agent_configuration.md` prevented the AI from improvising with default components.
+2. **Human-in-the-Loop Density Refinement:**
+   - When the AI generated a 3-card layout that felt squished horizontally, human critique (*"all three should be equal, shorten to qns"*) directed the model to pivot to a vertical-centered stat grid with prominent numbers and clean badge hierarchy.
+3. **Motion Choreography via GSAP:**
+   - Rather than relying on generic CSS transitions or heavy third-party animation bloat, GSAP was directed to orchestrate smooth, staggered card entrances, timer urgency pulses (turning red under 2 minutes), and milestone confetti.
+4. **Ergonomic Candidate Experience:**
+   - The question palette (1–10) provides instant visual clarity across 4 distinct states (*Answered [Emerald], Unanswered [Neutral], Marked for Review [Amber], Current [Terracotta Ring]*), with a confirmation modal preventing accidental submissions.
+5. **Custom Vector Identity Over Placeholder Emojis:**
+   - Directed the AI to avoid generic Lucide icons or emoji placeholders for branding, engineering a custom SVG emblem (`<AptitudeLogo />`) that renders consistently in the header, test engine, and browser tab favicons.
 
 ---
 

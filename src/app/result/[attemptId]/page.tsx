@@ -14,7 +14,7 @@ import {
 import confetti from "canvas-confetti";
 import gsap from "gsap";
 import axios from "axios";
-import { formatTime } from "@/lib/utils";
+import { formatTime, formatHumanDateTime } from "@/lib/utils";
 
 interface ReviewItem {
   questionNumber: number;
@@ -183,6 +183,11 @@ export default function ResultPage() {
                 </h1>
                 <p className="text-sm text-obsidian-600">
                   Candidate: <strong className="text-obsidian-900">{data.candidate.fullName}</strong> • {data.candidate.email}
+                  {data.submittedAt && (
+                    <span className="block sm:inline sm:before:content-['•'] sm:before:mx-1.5 text-obsidian-500 font-mono text-xs">
+                      Submitted: {formatHumanDateTime(data.submittedAt)}
+                    </span>
+                  )}
                 </p>
               </div>
 

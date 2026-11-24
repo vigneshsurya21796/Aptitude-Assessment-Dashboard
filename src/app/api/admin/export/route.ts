@@ -1,41 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import Papa from "papaparse";
-import { formatDurationMinutesSeconds } from "@/lib/utils";
+import { formatDurationMinutesSeconds, formatHumanDate, formatHumanDateTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-
-function formatHumanDateTime(date: Date | string | null | undefined): string {
-  if (!date) return "N/A";
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return "N/A";
-
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  const day = pad(d.getDate());
-  const month = months[d.getMonth()];
-  const year = d.getFullYear();
-
-  let hours = d.getHours();
-  const minutes = pad(d.getMinutes());
-  const seconds = pad(d.getSeconds());
-  const ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12 || 12;
-
-  return `${day} ${month} ${year}, ${pad(hours)}:${minutes}:${seconds} ${ampm}`;
-}
-
-function formatHumanDate(date: Date | string | null | undefined): string {
-  if (!date) return "N/A";
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return "N/A";
-
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  return `${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
-}
 
 export async function GET(req: NextRequest) {
   try {

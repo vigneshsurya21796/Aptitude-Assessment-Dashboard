@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import axios from "axios";
+import AptitudeLogo from "@/components/AptitudeLogo";
 
 interface QuestionData {
   id: string;
@@ -242,9 +243,7 @@ function TestEngine() {
       <header className="sticky top-0 z-30 w-full border-b border-stone-border bg-stone-surface/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-obsidian-950 text-stone-surface flex items-center justify-center font-serif text-lg font-bold">
-              Æ
-            </div>
+            <AptitudeLogo className="w-9 h-9 shrink-0 shadow-tinted-sm" />
             <div>
               <div className="font-serif text-base font-semibold text-obsidian-950 leading-none">
                 Aptitude Assessment

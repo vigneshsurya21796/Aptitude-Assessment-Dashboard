@@ -13,7 +13,7 @@ import {
   X
 } from "lucide-react";
 import axios from "axios";
-import { formatTime } from "@/lib/utils";
+import { formatTime, formatHumanDate, formatHumanDateTime } from "@/lib/utils";
 
 interface CandidateItem {
   id: string;
@@ -273,8 +273,8 @@ export default function AdminCandidatesPage() {
                               <span className="text-obsidian-400">UNSTARTED</span>
                             )}
                           </td>
-                          <td className="py-3.5 px-4 font-mono text-[11px] text-obsidian-500">
-                            {new Date(c.registeredAt).toISOString().split("T")[0]}
+                          <td className="py-3.5 px-4 font-mono text-[11px] text-obsidian-600">
+                            {formatHumanDate(c.registeredAt)}
                           </td>
                           <td className="py-3.5 px-4 text-right">
                             <button
@@ -343,6 +343,11 @@ export default function AdminCandidatesPage() {
                 </h2>
                 <p className="text-xs text-obsidian-600 mt-0.5">
                   {selectedCandidate?.candidate?.email} • {selectedCandidate?.candidate?.phone}
+                  {selectedCandidate?.attempt?.submittedAt && (
+                    <span className="block sm:inline sm:before:content-['•'] sm:before:mx-1.5 text-obsidian-500 font-mono text-[11px]">
+                      Submitted: {formatHumanDateTime(selectedCandidate.attempt.submittedAt)}
+                    </span>
+                  )}
                 </p>
               </div>
               <button

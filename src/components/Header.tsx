@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ShieldCheck, Award, LogOut, LayoutDashboard } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import AptitudeLogo from "@/components/AptitudeLogo";
 
 interface HeaderProps {
   isAdmin?: boolean;
@@ -40,9 +41,7 @@ export default function Header({ isAdmin = false }: HeaderProps) {
           href="/" 
           className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-terracotta-500 rounded-lg p-1 -ml-1 transition-transform active:scale-95"
         >
-          <div className="w-10 h-10 rounded-lg bg-obsidian-950 text-stone-surface flex items-center justify-center font-serif text-xl font-bold shadow-tinted-sm group-hover:bg-terracotta-500 transition-colors">
-            Æ
-          </div>
+          <AptitudeLogo className="w-10 h-10 shrink-0 shadow-tinted-sm group-hover:scale-105 transition-transform" />
           <div className="flex flex-col">
             <span className="font-serif text-lg font-semibold tracking-tight text-obsidian-950 leading-none">
               Aptitude Assessment
