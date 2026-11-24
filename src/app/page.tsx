@@ -442,7 +442,7 @@ export default function RegistrationPage() {
                       </span>
                     ) : (
                       <>
-                        <span>Proceed to Assessment Briefing</span>
+                        <span>Register</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
