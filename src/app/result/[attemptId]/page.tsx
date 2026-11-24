@@ -176,10 +176,10 @@ export default function ResultPage() {
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-subtle text-obsidian-700 text-xs font-mono mb-2">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  Verified Assessment Dossier
+                  Assessment Result
                 </div>
                 <h1 className="font-serif text-3xl sm:text-4xl font-bold text-obsidian-950">
-                  Performance Evaluation Report
+                  Candidate Test Result
                 </h1>
                 <p className="text-sm text-obsidian-600">
                   Candidate: <strong className="text-obsidian-900">{data.candidate.fullName}</strong> • {data.candidate.email}
@@ -382,13 +382,13 @@ export default function ResultPage() {
               onClick={() => router.push("/")}
               className="px-6 py-3 rounded-xl border border-stone-border bg-white text-obsidian-800 hover:bg-stone-subtle text-xs font-semibold uppercase tracking-wider transition-all btn-press shadow-tinted-sm"
             >
-              Exit to Assessment Portal
+              Return to Home
             </button>
             <button
               onClick={() => window.print()}
               className="px-6 py-3 rounded-xl bg-obsidian-950 text-stone-surface hover:bg-obsidian-850 text-xs font-semibold uppercase tracking-wider transition-all btn-press shadow-tinted-sm"
             >
-              Print / Save Assessment Report
+              Print / Save as PDF
             </button>
           </div>
 

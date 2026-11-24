@@ -47,10 +47,10 @@ function LoginForm() {
           <Lock className="w-6 h-6" />
         </div>
         <h1 className="font-serif text-2xl sm:text-3xl font-bold text-obsidian-950">
-          Executive Console Sign In
+          Admin Login
         </h1>
         <p className="text-xs text-obsidian-600">
-          Restricted management portal for test configuration and analytics.
+          Sign in to manage test questions, view candidate results, and configure settings.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ function LoginForm() {
       <form onSubmit={handleLogin} className="space-y-5">
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
-            Administrator Email
+            Admin Email
           </label>
           <div className="relative">
             <input
@@ -81,7 +81,7 @@ function LoginForm() {
 
         <div>
           <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
-            Security Password
+            Password
           </label>
           <div className="relative">
             <input

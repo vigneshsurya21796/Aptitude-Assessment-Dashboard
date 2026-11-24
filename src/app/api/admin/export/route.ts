@@ -1,8 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import Papa from "papaparse";
+import { formatDurationMinutesSeconds } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
+
+function formatHumanDateTime(date: Date | string | null | undefined): string {
+  if (!date) return "N/A";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "N/A";
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const day = pad(d.getDate());
+  const month = months[d.getMonth()];
+  const year = d.getFullYear();
+
+  let hours = d.getHours();
+  const minutes = pad(d.getMinutes());
+  const seconds = pad(d.getSeconds());
+  const ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+
+  return `${day} ${month} ${year}, ${pad(hours)}:${minutes}:${seconds} ${ampm}`;
+}
+
+function formatHumanDate(date: Date | string | null | undefined): string {
+  if (!date) return "N/A";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "N/A";
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  return `${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
 
 export async function GET(req: NextRequest) {
   try {
@@ -54,9 +87,9 @@ export async function GET(req: NextRequest) {
         "Incorrect Count": att && att.status === "COMPLETED" ? att.incorrectCount : "N/A",
         "Unattempted Count": att && att.status === "COMPLETED" ? att.unattemptedCount : "N/A",
         "Marks Deducted": att && att.status === "COMPLETED" ? att.marksDeducted : "N/A",
-        "Time Taken (Seconds)": att && att.status === "COMPLETED" ? att.timeTakenSeconds : "N/A",
-        "Date of Registration": c.createdAt.toISOString().split("T")[0],
-        "Attempt Submission Time": att?.submittedAt ? att.submittedAt.toISOString() : "N/A",
+        "Time Taken": att && att.status === "COMPLETED" ? formatDurationMinutesSeconds(att.timeTakenSeconds) : "N/A",
+        "Date of Registration": formatHumanDate(c.createdAt),
+        "Attempt Submission Time": formatHumanDateTime(att?.submittedAt),
       };
     });
 

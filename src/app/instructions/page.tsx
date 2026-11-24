@@ -126,10 +126,10 @@ export default function InstructionsPage() {
           <div className="space-y-3 anim-item">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-stone-subtle border border-stone-border text-obsidian-700 text-xs font-mono">
               <FileText className="w-3.5 h-3.5 text-terracotta-500" />
-              Proctored Candidate Protocol
+              Assessment Rules & Guidelines
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-obsidian-950">
-              Assessment Instructions & Structure
+              Assessment Instructions
             </h1>
             <p className="text-obsidian-600 text-base">
               Candidate: <span className="font-medium text-obsidian-900">{candidate?.fullName}</span> ({candidate?.email})
@@ -159,7 +159,7 @@ export default function InstructionsPage() {
               <div className="font-serif text-2xl font-bold text-obsidian-950">
                 {config?.testDurationMinutes ?? 15} <span className="text-sm font-sans font-normal text-obsidian-600">Minutes</span>
               </div>
-              <p className="text-xs text-obsidian-500 mt-1">Strict server-synced countdown timer</p>
+              <p className="text-xs text-obsidian-500 mt-1">Auto-submits when time runs out</p>
             </div>
 
             <div className="surface-elevated rounded-xl p-5 border border-stone-border">

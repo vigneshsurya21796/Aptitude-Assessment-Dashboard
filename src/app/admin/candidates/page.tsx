@@ -131,10 +131,10 @@ export default function AdminCandidatesPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="text-xs font-mono uppercase tracking-widest text-obsidian-500 mb-1">
-                Evaluation Dossiers
+                Candidate Submissions
               </div>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-obsidian-950">
-                Candidate Registry & Audit
+                Candidate Results
               </h1>
             </div>
 
@@ -144,7 +144,7 @@ export default function AdminCandidatesPage() {
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-obsidian-950 text-stone-surface hover:bg-obsidian-850 text-xs font-semibold uppercase tracking-wider transition-all btn-press shadow-tinted-sm w-fit"
             >
               <Download className="w-3.5 h-3.5 text-terracotta-400" />
-              <span>Export CSV Dossier</span>
+              <span>Export to CSV</span>
             </a>
           </div>
 
@@ -213,7 +213,7 @@ export default function AdminCandidatesPage() {
                     <th className="py-4 px-4">Percentage</th>
                     <th className="py-4 px-4">Outcome</th>
                     <th className="py-4 px-4">Date</th>
-                    <th className="py-4 px-4 text-right">Dossier</th>
+                    <th className="py-4 px-4 text-right">Details</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-border">
@@ -337,9 +337,9 @@ export default function AdminCandidatesPage() {
             
             <div className="flex items-start justify-between pb-4 border-b border-stone-border">
               <div>
-                <span className="text-xs font-mono uppercase text-obsidian-500 tracking-wider">Candidate Audit Dossier</span>
+                <span className="text-xs font-mono uppercase text-obsidian-500 tracking-wider">Candidate Test Details</span>
                 <h2 className="font-serif text-2xl font-bold text-obsidian-950">
-                  {selectedCandidate?.candidate?.fullName || "Candidate Performance Audit"}
+                  {selectedCandidate?.candidate?.fullName || "Candidate Test Details"}
                 </h2>
                 <p className="text-xs text-obsidian-600 mt-0.5">
                   {selectedCandidate?.candidate?.email} • {selectedCandidate?.candidate?.phone}

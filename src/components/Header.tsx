@@ -45,10 +45,10 @@ export default function Header({ isAdmin = false }: HeaderProps) {
           </div>
           <div className="flex flex-col">
             <span className="font-serif text-lg font-semibold tracking-tight text-obsidian-950 leading-none">
-              Aptitude Engine
+              Aptitude Assessment
             </span>
             <span className="text-[11px] font-mono tracking-widest text-obsidian-500 uppercase mt-1">
-              Executive Talent Assessment
+              Candidate Evaluation Portal
             </span>
           </div>
         </Link>
@@ -106,18 +106,13 @@ export default function Header({ isAdmin = false }: HeaderProps) {
             </div>
           ) : (
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-500/20 text-emerald-700 text-xs font-mono">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Live Verification Protocol
-              </div>
-
               {adminLoggedIn ? (
                 <Link
                   href="/admin/dashboard"
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-obsidian-900 text-stone-surface hover:bg-obsidian-850 transition-all shadow-tinted-sm btn-press"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
-                  Admin Console
+                  Admin Panel
                 </Link>
               ) : (
                 <Link

@@ -69,10 +69,10 @@ export default function AdminSettingsPage() {
           
           <div>
             <div className="text-xs font-mono uppercase tracking-widest text-obsidian-500 mb-1">
-              Global Policy Configuration
+              System Settings
             </div>
             <h1 className="font-serif text-3xl sm:text-4xl font-bold text-obsidian-950">
-              Assessment Parameters & Governance
+              Test Settings & Rules
             </h1>
           </div>
 
@@ -80,7 +80,7 @@ export default function AdminSettingsPage() {
           <div className="surface-elevated rounded-2xl p-6 border border-stone-border shadow-tinted-sm space-y-4">
             <h2 className="font-serif text-lg font-bold text-obsidian-950 flex items-center gap-2">
               <Layers className="w-4 h-4 text-terracotta-500" />
-              <span>Assessment Engine Status</span>
+              <span>Question Bank Status</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

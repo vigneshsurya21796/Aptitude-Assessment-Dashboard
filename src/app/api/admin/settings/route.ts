@@ -9,7 +9,6 @@ export async function GET() {
     if (!settings) {
       settings = await prisma.settings.create({
         data: {
-          id: 1,
           testDurationMinutes: 15,
           passPercentage: 60.0,
         },
@@ -72,7 +71,6 @@ export async function PUT(req: NextRequest) {
     } else {
       updated = await prisma.settings.create({
         data: {
-          id: 1,
           testDurationMinutes: duration,
           passPercentage: passThreshold,
         },

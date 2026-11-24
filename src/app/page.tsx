@@ -8,7 +8,8 @@ import {
   ShieldAlert, 
   Clock, 
   Award, 
-  Lock
+  UserCheck,
+  HelpCircle
 } from "lucide-react";
 import gsap from "gsap";
 import axios, { AxiosError } from "axios";
@@ -166,57 +167,76 @@ export default function RegistrationPage() {
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Column: Editorial Assessment Overview */}
+          {/* Left Column: Assessment Overview */}
           <div className="lg:col-span-5 flex flex-col space-y-8">
             <div className="space-y-4 hero-element">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-obsidian-950 text-stone-surface text-xs font-mono tracking-wider uppercase">
-                <Lock className="w-3.5 h-3.5 text-terracotta-400" />
-                Session Verification
+                <UserCheck className="w-3.5 h-3.5 text-terracotta-400" />
+                Candidate Registration
               </div>
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-5.5xl text-obsidian-950 leading-[1.15] font-semibold">
-                Executive Aptitude Evaluation
+                Corporate Aptitude Test
               </h1>
               <p className="text-obsidian-600 text-base sm:text-lg leading-relaxed">
-                A standardized 10-question evaluation measuring quantitative reasoning, 
-                logical deduction, and executive verbal communication. 
+                A standardized 10-question assessment evaluating quantitative problem solving, 
+                logical reasoning, and verbal comprehension. 
               </p>
             </div>
 
             {/* Key Assessment Parameters */}
             <div className="space-y-4 pt-4 border-t border-stone-border hero-element">
               <h2 className="text-xs font-mono uppercase tracking-widest text-obsidian-400">
-                Evaluation Standards
+                Test Summary
               </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="surface-elevated rounded-xl p-4 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-terracotta-50 text-terracotta-600 flex items-center justify-center shrink-0">
-                    <Clock className="w-4 h-4" />
+              <div className="grid grid-cols-3 gap-3">
+                {/* Questions */}
+                <div className="surface-elevated rounded-xl p-3.5 sm:p-4 flex flex-col items-center text-center border border-stone-border/80 hover:border-stone-border transition-all shadow-tinted-sm">
+                  <div className="w-8 h-8 rounded-lg bg-stone-100 text-obsidian-700 flex items-center justify-center mb-2">
+                    <HelpCircle className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="block text-xs font-mono text-obsidian-500">Duration</span>
-                    <span className="font-serif text-lg font-semibold text-obsidian-950">15 Minutes</span>
-                  </div>
+                  <span className="font-serif text-lg sm:text-xl font-bold text-obsidian-950 leading-none">
+                    10 Qns
+                  </span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-obsidian-500 mt-1.5">
+                    Questions
+                  </span>
                 </div>
 
-                <div className="surface-elevated rounded-xl p-4 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                {/* Duration */}
+                <div className="surface-elevated rounded-xl p-3.5 sm:p-4 flex flex-col items-center text-center border border-stone-border/80 hover:border-terracotta-200 transition-all shadow-tinted-sm">
+                  <div className="w-8 h-8 rounded-lg bg-terracotta-50 text-terracotta-600 flex items-center justify-center mb-2">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <span className="font-serif text-lg sm:text-xl font-bold text-obsidian-950 leading-none">
+                    15 Min
+                  </span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-obsidian-500 mt-1.5">
+                    Duration
+                  </span>
+                </div>
+
+                {/* Marking Scheme */}
+                <div className="surface-elevated rounded-xl p-3.5 sm:p-4 flex flex-col items-center text-center border border-stone-border/80 hover:border-emerald-200 transition-all shadow-tinted-sm">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
                     <Award className="w-4 h-4" />
                   </div>
-                  <div>
-                    <span className="block text-xs font-mono text-obsidian-500">Marking Formula</span>
-                    <span className="font-serif text-lg font-semibold text-obsidian-950">+2 / -1 Net</span>
-                  </div>
+                  <span className="font-serif text-lg sm:text-xl font-bold text-obsidian-950 leading-none">
+                    +2 / -1
+                  </span>
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-obsidian-500 mt-1.5">
+                    Marking
+                  </span>
                 </div>
               </div>
 
               <div className="surface-elevated rounded-xl p-4 space-y-2 text-xs text-obsidian-600">
                 <div className="flex items-center gap-2 font-medium text-obsidian-900">
                   <ShieldAlert className="w-4 h-4 text-terracotta-500" />
-                  Strict Single-Attempt Policy
+                  Single Attempt Only
                 </div>
                 <p>
-                  Each corporate candidate is authorized exactly one verified attempt per email identifier. Results are permanently stored in the audit registry.
+                  Each candidate can take the test only once per email address. Your answers are submitted and evaluated upon completion.
                 </p>
               </div>
             </div>
@@ -230,7 +250,7 @@ export default function RegistrationPage() {
                   Candidate Registration
                 </h2>
                 <p className="text-sm text-obsidian-600 mt-1">
-                  Enter your verified credentials to initiate your proctored evaluation session.
+                  Fill in your details below to begin your timed 10-question assessment.
                 </p>
               </div>
 
@@ -256,7 +276,7 @@ export default function RegistrationPage() {
                 {/* Full Name */}
                 <div>
                   <label className="block text-xs font-mono uppercase tracking-wider text-obsidian-700 mb-2">
-                    Full Legal Name <span className="text-terracotta-500">*</span>
+                    Full Name <span className="text-terracotta-500">*</span>
                   </label>
                   <input
                     type="text"

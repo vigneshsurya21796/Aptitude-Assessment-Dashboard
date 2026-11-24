@@ -96,7 +96,7 @@ export default function AdminDashboardPage() {
         <div className="flex-1 flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-8 h-8 border-2 border-obsidian-900 border-t-terracotta-500 rounded-full animate-spin" />
-            <span className="text-xs font-mono text-obsidian-600">Compiling Executive Metrics...</span>
+            <span className="text-xs font-mono text-obsidian-600">Loading Dashboard Metrics...</span>
           </div>
         </div>
       </div>
@@ -117,10 +117,10 @@ export default function AdminDashboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <div className="text-xs font-mono uppercase tracking-widest text-obsidian-500 mb-1">
-                Executive Control System
+                Admin Panel
               </div>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-obsidian-950">
-                Assessment Analytics & Operations
+                Dashboard Overview
               </h1>
             </div>
 
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
                 className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-stone-border bg-white text-obsidian-800 hover:bg-stone-subtle text-xs font-semibold uppercase tracking-wider transition-all btn-press shadow-tinted-sm"
               >
                 <Download className="w-3.5 h-3.5 text-obsidian-500" />
-                <span>Export CSV Dossier</span>
+                <span>Export to CSV</span>
               </a>
 
               <Link

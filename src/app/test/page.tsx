@@ -247,7 +247,7 @@ function TestEngine() {
             </div>
             <div>
               <div className="font-serif text-base font-semibold text-obsidian-950 leading-none">
-                Executive Aptitude Assessment
+                Aptitude Assessment
               </div>
               <div className="text-[11px] font-mono text-obsidian-500 mt-1">
                 Candidate: {candidateName}

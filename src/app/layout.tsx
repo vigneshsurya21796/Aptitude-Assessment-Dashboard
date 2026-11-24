@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aptitude Assessment | Executive Candidate Portal",
-  description: "High-stakes corporate aptitude evaluation and executive talent analytics platform.",
+  title: "Aptitude Assessment Dashboard",
+  description: "Corporate aptitude assessment platform for candidate evaluation and talent analytics.",
 };
 
 export default function RootLayout({

@@ -36,7 +36,6 @@ async function main() {
   if (!existingSettings) {
     await prisma.settings.create({
       data: {
-        id: 1,
         testDurationMinutes: 15,
         passPercentage: 60.0,
       },
