@@ -319,3 +319,40 @@ Rather than relying on unconstrained generative output, the application underwen
 4. **Timer & State Recovery:**
    - Answers and review markers are synced in real time to MongoDB and mirrored in browser `sessionStorage`. An accidental refresh or network glitch restores both the exact remaining seconds and answered questions without resetting the timer.
 
+---
+
+## 8. Visual Flow Walkthrough (Deliverable #3)
+
+Below is the complete visual documentation of both the Candidate Experience and the Administrator Governance portals:
+
+### 8.1. Candidate Assessment Journey
+
+| 01. Candidate Registration & Rules | 02. Assessment Instructions & Scheme |
+|:---:|:---:|
+| ![Candidate Registration](./images/01-candidate-registration.png) | ![Assessment Instructions](./images/02-assessment-instructions.png) |
+
+| 03. Active Test Engine & Question Palette | 04. Submissions Summary Confirmation Dialog |
+|:---:|:---:|
+| ![Test Engine & Palette](./images/03-test-engine-question-palette.png) | ![Submission Confirmation Dialog](./images/04-submission-confirmation-dialog.png) |
+
+| 05. Candidate Performance Report & Question Review |
+|:---:|
+| ![Candidate Test Result](./images/05-candidate-test-result.png) |
+
+---
+
+### 8.2. Administrator Governance & Management Journey
+
+| 06. Admin Authentication & Quick-Fill | 07. Executive Dashboard & Recharts Analytics |
+|:---:|:---:|
+| ![Admin Login](./images/06-admin-login.png) | ![Admin Dashboard Analytics](./images/07-admin-dashboard-analytics.png) |
+
+| 08. Question Bank & 10 Active Limit Guardrail | 09. Candidate Results Registry & CSV Export |
+|:---:|:---:|
+| ![Corporate Question Bank](./images/08-admin-question-bank.png) | ![Candidate Results](./images/09-admin-candidate-results.png) |
+
+| 10. Test Duration & Passing Percentage Settings |
+|:---:|
+| ![Test Settings](./images/10-admin-test-settings.png) |
+
+
